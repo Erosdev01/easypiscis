@@ -802,36 +802,36 @@
   <!-- SPLASH -->
   <section id="splash" class="screen active">
     <div class="corner-ribbon"><span>Nuevo</span></div>
-    <div class="splash-mark">â™“</div>
+    <div class="splash-mark">♓</div>
     <div class="splash-rule"></div>
     <h1 class="splash-title">Easy <em>Piscis</em></h1>
     <div class="splash-tag">Registro personal</div>
-    <div class="splash-signature">E+C â†’ L</div>
+    <div class="splash-signature">E+C → L</div>
   </section>
 
   <!-- HOME -->
   <section id="home" class="screen">
     <div class="eyebrow">Registro personal</div>
     <h1 class="title">Hola de <em>nuevo</em></h1>
-    <p class="subtitle">CargÃ¡ cada servicio o consultÃ¡ lo que ya anotaste.</p>
+    <p class="subtitle">Cargá cada servicio o consultá lo que ya anotaste.</p>
     <div class="home-actions">
       <button class="tab-btn primary" onclick="openAddNew()">
-        <span class="num">ï¼‹</span>
+        <span class="num">＋</span>
         <span class="label">Agregar</span>
         <span class="hint">Cargar un nuevo registro</span>
       </button>
       <button class="tab-btn secondary" onclick="showScreen('view')">
-        <span class="num">â‰¡</span>
+        <span class="num">≡</span>
         <span class="label">Ingresos</span>
         <span class="hint">Repasar, editar o borrar</span>
       </button>
       <button class="tab-btn tertiary" onclick="showScreen('support')">
-        <span class="num">â‡…</span>
+        <span class="num">⇅</span>
         <span class="label">Soporte</span>
         <span class="hint">Exportar / importar</span>
       </button>
       <button class="tab-btn quaternary" onclick="showScreen('gastos')">
-        <span class="num">âˆ’</span>
+        <span class="num">−</span>
         <span class="label">Gastos</span>
         <span class="hint">Registrar un gasto</span>
       </button>
@@ -841,7 +841,7 @@
   <!-- ADD / EDIT -->
   <section id="add" class="screen">
     <div class="topbar">
-      <button class="back-btn" onclick="goHomeFromAdd()">â†</button>
+      <button class="back-btn" onclick="goHomeFromAdd()">←</button>
       <h2 id="addTitle">Agregar</h2>
     </div>
     <form id="entryForm" onsubmit="return saveEntry(event)">
@@ -859,7 +859,7 @@
       </div>
 
       <div class="field">
-        <label>DuraciÃ³n</label>
+        <label>Duración</label>
         <div class="wheel-group">
           <div class="wheel-frame">
             <div class="wheel-scroll" id="wheelDurHoras"></div>
@@ -910,7 +910,7 @@
   <!-- VIEW -->
   <section id="view" class="screen">
     <div class="topbar">
-      <button class="back-btn" onclick="showScreen('home')">â†</button>
+      <button class="back-btn" onclick="showScreen('home')">←</button>
       <h2>Ingresos</h2>
     </div>
     <div id="viewContent"></div>
@@ -919,19 +919,19 @@
   <!-- SUPPORT -->
   <section id="support" class="screen">
     <div class="topbar">
-      <button class="back-btn" onclick="showScreen('home')">â†</button>
+      <button class="back-btn" onclick="showScreen('home')">←</button>
       <h2>Soporte</h2>
     </div>
 
     <div class="support-card">
       <h3 class="support-title">Exportar copia de respaldo</h3>
-      <p class="support-text">DescargÃ¡ un archivo con todos tus registros. Guardalo en un lugar seguro por si necesitÃ¡s restaurarlos mÃ¡s adelante.</p>
+      <p class="support-text">Descargá un archivo con todos tus registros. Guardalo en un lugar seguro por si necesitás restaurarlos más adelante.</p>
       <button type="button" class="save-btn" onclick="exportBackup()">Descargar copia (.json)</button>
     </div>
 
     <div class="support-card">
       <h3 class="support-title">Importar copia de respaldo</h3>
-      <p class="support-text">SeleccionÃ¡ un archivo de copia exportado previamente. <span class="support-warn">Esto reemplaza los registros actuales.</span></p>
+      <p class="support-text">Seleccioná un archivo de copia exportado previamente. <span class="support-warn">Esto reemplaza los registros actuales.</span></p>
       <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importBackup(event)">
       <button type="button" class="import-btn" onclick="document.getElementById('importFile').click()">Elegir archivo</button>
     </div>
@@ -942,7 +942,7 @@
   <!-- GASTOS -->
   <section id="gastos" class="screen">
     <div class="topbar">
-      <button class="back-btn" onclick="showScreen('home')">â†</button>
+      <button class="back-btn" onclick="showScreen('home')">←</button>
       <h2>Gastos</h2>
     </div>
     <div id="gastosContent"></div>
@@ -1006,7 +1006,7 @@
   let wheelServicio, wheelDurHoras, wheelDurMin, wheelHoraH, wheelHoraM;
 
   const COLORS = [
-    {id:'ambar', hex:'#C9A15C', label:'Ãmbar'},
+    {id:'ambar', hex:'#C9A15C', label:'Ámbar'},
     {id:'verde', hex:'#5FA8A0', label:'Verde'},
     {id:'rojo', hex:'#C1655A', label:'Rojo'},
     {id:'azul', hex:'#6C8FC7', label:'Azul'},
@@ -1096,7 +1096,7 @@
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      setSupportMsg(`Copia exportada Â· ${entries.length} registro(s) y ${gastos.length} gasto(s)`, 'ok');
+      setSupportMsg(`Copia exportada · ${entries.length} registro(s) y ${gastos.length} gasto(s)`, 'ok');
     }catch(e){
       setSupportMsg('No se pudo exportar la copia.', 'error');
     }
@@ -1111,17 +1111,17 @@
         const parsed = JSON.parse(reader.result);
         const entries = Array.isArray(parsed) ? parsed : parsed.entries;
         const gastos = Array.isArray(parsed) ? [] : (parsed.gastos || []);
-        if(!Array.isArray(entries)) throw new Error('Formato invÃ¡lido');
-        const confirmMsg = `Se van a reemplazar los registros actuales por ${entries.length} registro(s) y ${gastos.length} gasto(s) del archivo. Â¿Continuar?`;
+        if(!Array.isArray(entries)) throw new Error('Formato inválido');
+        const confirmMsg = `Se van a reemplazar los registros actuales por ${entries.length} registro(s) y ${gastos.length} gasto(s) del archivo. ¿Continuar?`;
         if(!confirm(confirmMsg)){
           event.target.value = '';
           return;
         }
         saveEntries(entries);
         saveGastos(gastos);
-        setSupportMsg(`Copia importada Â· ${entries.length} registro(s) y ${gastos.length} gasto(s)`, 'ok');
+        setSupportMsg(`Copia importada · ${entries.length} registro(s) y ${gastos.length} gasto(s)`, 'ok');
       }catch(e){
-        setSupportMsg('El archivo no tiene un formato vÃ¡lido.', 'error');
+        setSupportMsg('El archivo no tiene un formato válido.', 'error');
       }finally{
         event.target.value = '';
       }
@@ -1194,7 +1194,7 @@
 
   function deleteCurrentEntry(){
     if(!editingId) return;
-    if(!confirm('Â¿Eliminar este registro?')) return;
+    if(!confirm('¿Eliminar este registro?')) return;
     let list = loadEntries().filter(x => x.id !== editingId);
     saveEntries(list);
     resetForm();
@@ -1232,7 +1232,7 @@
     const parts = [];
     if(h) parts.push(`${h}h`);
     if(m) parts.push(`${m}min`);
-    return parts.join(' ') || 'â€”';
+    return parts.join(' ') || '—';
   }
 
   let totalPeriod = 'dia';
@@ -1240,7 +1240,7 @@
   let colorFilter = 'todos';
   let fechaFiltro = null; // 'YYYY-MM-DD' o null
   let filterOpen = {periodo:false, servicio:false, color:false, fecha:false};
-  const PERIOD_LABELS = {dia:'Hoy', semana:'Esta semana', mes:'Este mes', anio:'Este aÃ±o'};
+  const PERIOD_LABELS = {dia:'Hoy', semana:'Esta semana', mes:'Este mes', anio:'Este año'};
   const SERVICIOS = ['Encuentro','Videollamada','Cafecito','Telegram'];
 
   function toggleFilter(key){
@@ -1303,7 +1303,7 @@
   }
 
   function getWeekRange(ref){
-    const day = ref.getDay(); // 0=domingo..6=sÃ¡bado
+    const day = ref.getDay(); // 0=domingo..6=sábado
     const diffToMonday = (day === 0 ? -6 : 1 - day);
     const monday = new Date(ref);
     monday.setDate(ref.getDate() + diffToMonday);
@@ -1345,8 +1345,8 @@
     if(list.length === 0){
       content.innerHTML = `
         <div class="empty-state">
-          <div class="glyph">â—‡</div>
-          <p>TodavÃ­a no cargaste ningÃºn registro. TocÃ¡ "Agregar" desde el inicio para empezar tu libro.</p>
+          <div class="glyph">◇</div>
+          <p>Todavía no cargaste ningún registro. Tocá "Agregar" desde el inicio para empezar tu libro.</p>
         </div>`;
       return;
     }
@@ -1358,36 +1358,36 @@
     const periodServiceColor = filterByPeriod(fechaFiltered, totalPeriod, periodRefDate);
     const total = periodServiceColor.reduce((sum, x) => sum + (parseFloat(x.monto) || 0), 0);
 
-    // La lista de abajo siempre queda acotada a un dÃ­a: el elegido en el filtro
-    // de Fecha, o el dÃ­a de hoy si no se eligiÃ³ ninguno.
+    // La lista de abajo siempre queda acotada a un día: el elegido en el filtro
+    // de Fecha, o el día de hoy si no se eligió ninguno.
     const listFechaStr = fechaFiltro || toLocalDateStr(new Date());
     const dayList = filterByFecha(colorFiltered, listFechaStr);
 
-    const servicioLabel = servicioFilter === 'todos' ? '' : ` Â· ${servicioFilter}`;
-    const colorLabel = colorFilter === 'todos' ? '' : ` Â· ${colorOf(colorFilter).label}`;
-    const fechaLabel = fechaFiltro ? ` Â· ${fmtFechaCorta(fechaFiltro)}` : '';
+    const servicioLabel = servicioFilter === 'todos' ? '' : ` · ${servicioFilter}`;
+    const colorLabel = colorFilter === 'todos' ? '' : ` · ${colorOf(colorFilter).label}`;
+    const fechaLabel = fechaFiltro ? ` · ${fmtFechaCorta(fechaFiltro)}` : '';
 
     let html = `
       <div class="total-bar">
         <div>
-          <span class="lbl">Total Â· ${PERIOD_LABELS[totalPeriod]}${servicioLabel}${colorLabel}${fechaLabel}</span>
+          <span class="lbl">Total · ${PERIOD_LABELS[totalPeriod]}${servicioLabel}${colorLabel}${fechaLabel}</span>
           <div class="total-count">${periodServiceColor.length} registro${periodServiceColor.length===1?'':'s'}</div>
         </div>
         <span class="val">$ ${fmtMoney(total)}</span>
       </div>
       <div class="filters-row">
         <button class="filter-chip ${filterOpen.periodo?'is-open':''}" onclick="toggleFilter('periodo')">
-          <span class="filter-chip-label">PerÃ­odo</span>
+          <span class="filter-chip-label">Período</span>
           <span class="filter-chip-value">
             <span class="val-text">${PERIOD_LABELS[totalPeriod]}</span>
-            <span class="chev ${filterOpen.periodo?'open':''}">âŒ„</span>
+            <span class="chev ${filterOpen.periodo?'open':''}">⌄</span>
           </span>
         </button>
         <button class="filter-chip ${filterOpen.servicio?'is-open':''}" onclick="toggleFilter('servicio')">
           <span class="filter-chip-label">Servicio</span>
           <span class="filter-chip-value">
             <span class="val-text">${servicioFilter==='todos' ? 'Todos' : servicioFilter}</span>
-            <span class="chev ${filterOpen.servicio?'open':''}">âŒ„</span>
+            <span class="chev ${filterOpen.servicio?'open':''}">⌄</span>
           </span>
         </button>
         <button class="filter-chip ${filterOpen.color?'is-open':''}" onclick="toggleFilter('color')">
@@ -1395,24 +1395,24 @@
           <span class="filter-chip-value">
             ${colorFilter!=='todos' ? `<span class="color-current-dot" style="background:${colorOf(colorFilter).hex}"></span>` : ''}
             <span class="val-text">${colorFilter==='todos' ? 'Todos' : colorOf(colorFilter).label}</span>
-            <span class="chev ${filterOpen.color?'open':''}">âŒ„</span>
+            <span class="chev ${filterOpen.color?'open':''}">⌄</span>
           </span>
         </button>
         <button class="filter-chip ${filterOpen.fecha?'is-open':''}" onclick="toggleFilter('fecha')">
           <span class="filter-chip-label">Fecha</span>
           <span class="filter-chip-value">
             <span class="val-text">${fechaFiltro ? fmtFechaCorta(fechaFiltro) : 'Hoy'}</span>
-            <span class="chev ${filterOpen.fecha?'open':''}">âŒ„</span>
+            <span class="chev ${filterOpen.fecha?'open':''}">⌄</span>
           </span>
         </button>
       </div>
       ${filterOpen.periodo ? `
       <div class="filter-panel">
         <div class="period-tabs">
-          <button class="period-tab ${totalPeriod==='dia'?'active':''}" onclick="setPeriod('dia')">DÃ­a</button>
+          <button class="period-tab ${totalPeriod==='dia'?'active':''}" onclick="setPeriod('dia')">Día</button>
           <button class="period-tab ${totalPeriod==='semana'?'active':''}" onclick="setPeriod('semana')">Semana</button>
           <button class="period-tab ${totalPeriod==='mes'?'active':''}" onclick="setPeriod('mes')">Mes</button>
-          <button class="period-tab ${totalPeriod==='anio'?'active':''}" onclick="setPeriod('anio')">AÃ±o</button>
+          <button class="period-tab ${totalPeriod==='anio'?'active':''}" onclick="setPeriod('anio')">Año</button>
         </div>
       </div>` : ''}
       ${filterOpen.servicio ? `
@@ -1440,8 +1440,8 @@
     if(dayList.length === 0){
       html += `
         <div class="empty-state" style="padding-top:44px;">
-          <div class="glyph">â—‡</div>
-          <p>${fechaFiltro ? 'No hay registros para ese dÃ­a.' : 'TodavÃ­a no cargaste ningÃºn registro hoy.'}</p>
+          <div class="glyph">◇</div>
+          <p>${fechaFiltro ? 'No hay registros para ese día.' : 'Todavía no cargaste ningún registro hoy.'}</p>
         </div>`;
       content.innerHTML = html;
       return;
@@ -1464,7 +1464,7 @@
             <div class="servicio">${escapeHtml(entry.servicio || 'Sin nombre')}</div>
             <div class="meta">
               ${hora ? `<span>${hora}</span>` : ''}
-              ${dur !== 'â€”' ? `<span>${dur}</span>` : ''}
+              ${dur !== '—' ? `<span>${dur}</span>` : ''}
             </div>
             ${entry.otro ? `<div class="otro">${escapeHtml(entry.otro)}</div>` : ''}
           </span>
@@ -1545,7 +1545,7 @@
   }
 
   function deleteGasto(id){
-    if(!confirm('Â¿Eliminar este gasto?')) return;
+    if(!confirm('¿Eliminar este gasto?')) return;
     saveGastos(loadGastos().filter(g => g.id !== id));
     renderGastos();
   }
@@ -1558,10 +1558,10 @@
     const periodRefDate = gastoFechaFiltro ? parseLocalDateStr(gastoFechaFiltro) : new Date();
     const periodFiltered = filterByPeriod(fechaFiltered, gastoPeriod, periodRefDate);
     const totalGasto = periodFiltered.reduce((sum,x)=> sum + (parseFloat(x.monto) || 0), 0);
-    const fechaLabel = gastoFechaFiltro ? ` Â· ${fmtFechaCorta(gastoFechaFiltro)}` : '';
+    const fechaLabel = gastoFechaFiltro ? ` · ${fmtFechaCorta(gastoFechaFiltro)}` : '';
 
-    // La lista de abajo siempre queda acotada a un dÃ­a: el elegido en el filtro
-    // de Fecha, o el dÃ­a de hoy si no se eligiÃ³ ninguno.
+    // La lista de abajo siempre queda acotada a un día: el elegido en el filtro
+    // de Fecha, o el día de hoy si no se eligió ninguno.
     const listFechaStr = gastoFechaFiltro || toLocalDateStr(new Date());
     const dayList = filterByFecha(list, listFechaStr);
 
@@ -1583,34 +1583,34 @@
 
       <div class="total-bar">
         <div>
-          <span class="lbl">Total gastos Â· ${PERIOD_LABELS[gastoPeriod]}${fechaLabel}</span>
+          <span class="lbl">Total gastos · ${PERIOD_LABELS[gastoPeriod]}${fechaLabel}</span>
           <div class="total-count">${periodFiltered.length} registro${periodFiltered.length===1?'':'s'}</div>
         </div>
         <span class="val" style="color:var(--danger)">$ ${fmtMoney(totalGasto)}</span>
       </div>
       <div class="filters-row">
         <button class="filter-chip ${gastoFilterOpen.periodo?'is-open':''}" onclick="toggleGastoFilter('periodo')">
-          <span class="filter-chip-label">PerÃ­odo</span>
+          <span class="filter-chip-label">Período</span>
           <span class="filter-chip-value">
             <span class="val-text">${PERIOD_LABELS[gastoPeriod]}</span>
-            <span class="chev ${gastoFilterOpen.periodo?'open':''}">âŒ„</span>
+            <span class="chev ${gastoFilterOpen.periodo?'open':''}">⌄</span>
           </span>
         </button>
         <button class="filter-chip ${gastoFilterOpen.fecha?'is-open':''}" onclick="toggleGastoFilter('fecha')">
           <span class="filter-chip-label">Fecha</span>
           <span class="filter-chip-value">
             <span class="val-text">${gastoFechaFiltro ? fmtFechaCorta(gastoFechaFiltro) : 'Hoy'}</span>
-            <span class="chev ${gastoFilterOpen.fecha?'open':''}">âŒ„</span>
+            <span class="chev ${gastoFilterOpen.fecha?'open':''}">⌄</span>
           </span>
         </button>
       </div>
       ${gastoFilterOpen.periodo ? `
       <div class="filter-panel">
         <div class="period-tabs">
-          <button class="period-tab ${gastoPeriod==='dia'?'active':''}" onclick="setGastoPeriod('dia')">DÃ­a</button>
+          <button class="period-tab ${gastoPeriod==='dia'?'active':''}" onclick="setGastoPeriod('dia')">Día</button>
           <button class="period-tab ${gastoPeriod==='semana'?'active':''}" onclick="setGastoPeriod('semana')">Semana</button>
           <button class="period-tab ${gastoPeriod==='mes'?'active':''}" onclick="setGastoPeriod('mes')">Mes</button>
-          <button class="period-tab ${gastoPeriod==='anio'?'active':''}" onclick="setGastoPeriod('anio')">AÃ±o</button>
+          <button class="period-tab ${gastoPeriod==='anio'?'active':''}" onclick="setGastoPeriod('anio')">Año</button>
         </div>
       </div>` : ''}
       ${gastoFilterOpen.fecha ? `
@@ -1624,8 +1624,8 @@
     if(dayList.length === 0){
       html += `
         <div class="empty-state" style="padding-top:24px;">
-          <div class="glyph">â—‡</div>
-          <p>${gastoFechaFiltro ? 'No hay gastos para ese dÃ­a.' : 'TodavÃ­a no cargaste ningÃºn gasto hoy.'}</p>
+          <div class="glyph">◇</div>
+          <p>${gastoFechaFiltro ? 'No hay gastos para ese día.' : 'Todavía no cargaste ningún gasto hoy.'}</p>
         </div>`;
       content.innerHTML = html;
       return;
@@ -1655,7 +1655,7 @@
           <span class="main">
             <div class="servicio">${g.comentario ? escapeHtml(g.comentario) : 'Gasto'}</div>
           </span>
-          <span class="monto">âˆ’ $ ${fmtMoney(g.monto)}</span>
+          <span class="monto">− $ ${fmtMoney(g.monto)}</span>
         </div>`;
     });
 
