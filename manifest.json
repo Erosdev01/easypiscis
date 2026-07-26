@@ -1,7 +1,7 @@
 {
   "name": "Easy Piscis",
   "short_name": "Easy Piscis",
-  "description": "Agenda personal de servicios â€” Easy Piscis",
+  "description": "Agenda personal de servicios — Easy Piscis",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
