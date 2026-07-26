@@ -8,7 +8,7 @@ const APP_SHELL = [
   './icons/icon-maskable-512.png'
 ];
 
-// Instalación: precachea el app shell
+// InstalaciÃ³n: precachea el app shell
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -17,7 +17,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activación: limpia caches viejas de versiones anteriores
+// ActivaciÃ³n: limpia caches viejas de versiones anteriores
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
