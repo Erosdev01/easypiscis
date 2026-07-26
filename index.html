@@ -183,6 +183,33 @@
     color:var(--text-faint);
     opacity:.55;
   }
+  .corner-ribbon{
+    position:absolute;
+    top:0;
+    right:-22px;
+    width:130px;
+    height:130px;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:2;
+  }
+  .corner-ribbon span{
+    position:absolute;
+    top:26px;
+    right:-34px;
+    width:170px;
+    transform:rotate(45deg);
+    background:var(--accent);
+    color:#20180a;
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    text-align:center;
+    padding:5px 0;
+    box-shadow:0 2px 6px rgba(0,0,0,.35);
+  }
 
   /* ---------- Home ---------- */
   #home{padding-top:88px; padding-bottom:40px;}
@@ -213,17 +240,17 @@
     margin:0 0 56px;
     max-width:32ch;
   }
-  .home-actions{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+  .home-actions{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
   .tab-btn{
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:7px;
-    aspect-ratio:1/1.18;
+    gap:9px;
+    aspect-ratio:1/1.05;
     width:100%;
     text-align:center;
-    padding:14px 6px;
+    padding:18px 10px;
     border-radius:var(--radius);
     border:1px solid var(--line);
     background:var(--surface);
@@ -237,13 +264,13 @@
   .tab-btn:active{transform:scale(.97);}
   .tab-btn .num{
     font-family:var(--font-mono);
-    font-size:19px;
+    font-size:21px;
     line-height:1;
     color:var(--text-faint);
     border:1px solid var(--line);
-    border-radius:10px;
-    width:40px;
-    height:40px;
+    border-radius:11px;
+    width:44px;
+    height:44px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -251,19 +278,19 @@
   }
   .tab-btn .label{
     font-family:var(--font-display);
-    font-size:16px;
+    font-size:18px;
     font-weight:500;
     display:block;
   }
   .tab-btn .hint{
-    font-size:10px;
+    font-size:11px;
     color:var(--text-faint);
     display:block;
     margin-top:1px;
     font-family:var(--font-body);
     line-height:1.3;
   }
-  @media (max-width:360px){
+  @media (max-width:340px){
     .tab-btn .hint{display:none;}
     .tab-btn{aspect-ratio:1/1;}
   }
@@ -287,6 +314,12 @@
     content:"";
     position:absolute; left:0; top:0; right:0; height:3px;
     background:var(--violet);
+  }
+  .tab-btn.quaternary .num{color:var(--danger); border-color:var(--danger);}
+  .tab-btn.quaternary::before{
+    content:"";
+    position:absolute; left:0; top:0; right:0; height:3px;
+    background:var(--danger);
   }
 
   /* ---------- Top bar (add/view screens) ---------- */
@@ -486,6 +519,33 @@
   }
   .support-msg.error{color:var(--danger);}
   .support-msg.ok{color:var(--teal);}
+
+  /* ---------- Gastos ---------- */
+  #gastos{padding-bottom:60px;}
+  .gasto-add-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 18px 6px;
+    margin-bottom:20px;
+  }
+  .day-header.gasto-day-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:10px;
+  }
+  .balance-chip{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.03em;
+    text-transform:none;
+    white-space:nowrap;
+  }
+  .balance-chip.pos{color:var(--teal);}
+  .balance-chip.neg{color:var(--danger);}
+  .gasto-row .servicio{color:var(--text);}
+  .gasto-row .monto{color:var(--danger);}
 
   /* ---------- Ledger list ---------- */
   #view{padding-bottom:60px;}
@@ -741,33 +801,39 @@
 
   <!-- SPLASH -->
   <section id="splash" class="screen active">
-    <div class="splash-mark">♓</div>
+    <div class="corner-ribbon"><span>Nuevo</span></div>
+    <div class="splash-mark">â™“</div>
     <div class="splash-rule"></div>
     <h1 class="splash-title">Easy <em>Piscis</em></h1>
     <div class="splash-tag">Registro personal</div>
-    <div class="splash-signature">E+C → L</div>
+    <div class="splash-signature">E+C â†’ L</div>
   </section>
 
   <!-- HOME -->
   <section id="home" class="screen">
     <div class="eyebrow">Registro personal</div>
     <h1 class="title">Hola de <em>nuevo</em></h1>
-    <p class="subtitle">Cargá cada servicio o consultá lo que ya anotaste.</p>
+    <p class="subtitle">CargÃ¡ cada servicio o consultÃ¡ lo que ya anotaste.</p>
     <div class="home-actions">
       <button class="tab-btn primary" onclick="openAddNew()">
-        <span class="num">＋</span>
+        <span class="num">ï¼‹</span>
         <span class="label">Agregar</span>
         <span class="hint">Cargar un nuevo registro</span>
       </button>
       <button class="tab-btn secondary" onclick="showScreen('view')">
-        <span class="num">≡</span>
-        <span class="label">Ver</span>
+        <span class="num">â‰¡</span>
+        <span class="label">Ingresos</span>
         <span class="hint">Repasar, editar o borrar</span>
       </button>
       <button class="tab-btn tertiary" onclick="showScreen('support')">
-        <span class="num">⇅</span>
+        <span class="num">â‡…</span>
         <span class="label">Soporte</span>
         <span class="hint">Exportar / importar</span>
+      </button>
+      <button class="tab-btn quaternary" onclick="showScreen('gastos')">
+        <span class="num">âˆ’</span>
+        <span class="label">Gastos</span>
+        <span class="hint">Registrar un gasto</span>
       </button>
     </div>
   </section>
@@ -775,7 +841,7 @@
   <!-- ADD / EDIT -->
   <section id="add" class="screen">
     <div class="topbar">
-      <button class="back-btn" onclick="goHomeFromAdd()">←</button>
+      <button class="back-btn" onclick="goHomeFromAdd()">â†</button>
       <h2 id="addTitle">Agregar</h2>
     </div>
     <form id="entryForm" onsubmit="return saveEntry(event)">
@@ -793,7 +859,7 @@
       </div>
 
       <div class="field">
-        <label>Duración</label>
+        <label>DuraciÃ³n</label>
         <div class="wheel-group">
           <div class="wheel-frame">
             <div class="wheel-scroll" id="wheelDurHoras"></div>
@@ -844,8 +910,8 @@
   <!-- VIEW -->
   <section id="view" class="screen">
     <div class="topbar">
-      <button class="back-btn" onclick="showScreen('home')">←</button>
-      <h2>Ver registros</h2>
+      <button class="back-btn" onclick="showScreen('home')">â†</button>
+      <h2>Ingresos</h2>
     </div>
     <div id="viewContent"></div>
   </section>
@@ -853,24 +919,33 @@
   <!-- SUPPORT -->
   <section id="support" class="screen">
     <div class="topbar">
-      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <button class="back-btn" onclick="showScreen('home')">â†</button>
       <h2>Soporte</h2>
     </div>
 
     <div class="support-card">
       <h3 class="support-title">Exportar copia de respaldo</h3>
-      <p class="support-text">Descargá un archivo con todos tus registros. Guardalo en un lugar seguro por si necesitás restaurarlos más adelante.</p>
+      <p class="support-text">DescargÃ¡ un archivo con todos tus registros. Guardalo en un lugar seguro por si necesitÃ¡s restaurarlos mÃ¡s adelante.</p>
       <button type="button" class="save-btn" onclick="exportBackup()">Descargar copia (.json)</button>
     </div>
 
     <div class="support-card">
       <h3 class="support-title">Importar copia de respaldo</h3>
-      <p class="support-text">Seleccioná un archivo de copia exportado previamente. <span class="support-warn">Esto reemplaza los registros actuales.</span></p>
+      <p class="support-text">SeleccionÃ¡ un archivo de copia exportado previamente. <span class="support-warn">Esto reemplaza los registros actuales.</span></p>
       <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importBackup(event)">
       <button type="button" class="import-btn" onclick="document.getElementById('importFile').click()">Elegir archivo</button>
     </div>
 
     <div id="supportMsg" class="support-msg"></div>
+  </section>
+
+  <!-- GASTOS -->
+  <section id="gastos" class="screen">
+    <div class="topbar">
+      <button class="back-btn" onclick="showScreen('home')">â†</button>
+      <h2>Gastos</h2>
+    </div>
+    <div id="gastosContent"></div>
   </section>
 
 </div>
@@ -931,7 +1006,7 @@
   let wheelServicio, wheelDurHoras, wheelDurMin, wheelHoraH, wheelHoraM;
 
   const COLORS = [
-    {id:'ambar', hex:'#C9A15C', label:'Ámbar'},
+    {id:'ambar', hex:'#C9A15C', label:'Ãmbar'},
     {id:'verde', hex:'#5FA8A0', label:'Verde'},
     {id:'rojo', hex:'#C1655A', label:'Rojo'},
     {id:'azul', hex:'#6C8FC7', label:'Azul'},
@@ -1003,11 +1078,13 @@
   function exportBackup(){
     try{
       const entries = loadEntries();
+      const gastos = loadGastos();
       const payload = {
         app: 'Easy Piscis',
         exportedAt: new Date().toISOString(),
-        version: 1,
-        entries
+        version: 2,
+        entries,
+        gastos
       };
       const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
       const url = URL.createObjectURL(blob);
@@ -1019,7 +1096,7 @@
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      setSupportMsg(`Copia exportada · ${entries.length} registro(s)`, 'ok');
+      setSupportMsg(`Copia exportada Â· ${entries.length} registro(s) y ${gastos.length} gasto(s)`, 'ok');
     }catch(e){
       setSupportMsg('No se pudo exportar la copia.', 'error');
     }
@@ -1033,16 +1110,18 @@
       try{
         const parsed = JSON.parse(reader.result);
         const entries = Array.isArray(parsed) ? parsed : parsed.entries;
-        if(!Array.isArray(entries)) throw new Error('Formato inválido');
-        const confirmMsg = `Se van a reemplazar los registros actuales por ${entries.length} registro(s) del archivo. ¿Continuar?`;
+        const gastos = Array.isArray(parsed) ? [] : (parsed.gastos || []);
+        if(!Array.isArray(entries)) throw new Error('Formato invÃ¡lido');
+        const confirmMsg = `Se van a reemplazar los registros actuales por ${entries.length} registro(s) y ${gastos.length} gasto(s) del archivo. Â¿Continuar?`;
         if(!confirm(confirmMsg)){
           event.target.value = '';
           return;
         }
         saveEntries(entries);
-        setSupportMsg(`Copia importada · ${entries.length} registro(s)`, 'ok');
+        saveGastos(gastos);
+        setSupportMsg(`Copia importada Â· ${entries.length} registro(s) y ${gastos.length} gasto(s)`, 'ok');
       }catch(e){
-        setSupportMsg('El archivo no tiene un formato válido.', 'error');
+        setSupportMsg('El archivo no tiene un formato vÃ¡lido.', 'error');
       }finally{
         event.target.value = '';
       }
@@ -1055,6 +1134,7 @@
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     if(id === 'view') renderView();
+    if(id === 'gastos') renderGastos();
   }
 
   function goHomeFromAdd(){
@@ -1114,7 +1194,7 @@
 
   function deleteCurrentEntry(){
     if(!editingId) return;
-    if(!confirm('¿Eliminar este registro?')) return;
+    if(!confirm('Â¿Eliminar este registro?')) return;
     let list = loadEntries().filter(x => x.id !== editingId);
     saveEntries(list);
     resetForm();
@@ -1152,7 +1232,7 @@
     const parts = [];
     if(h) parts.push(`${h}h`);
     if(m) parts.push(`${m}min`);
-    return parts.join(' ') || '—';
+    return parts.join(' ') || 'â€”';
   }
 
   let totalPeriod = 'dia';
@@ -1160,7 +1240,7 @@
   let colorFilter = 'todos';
   let fechaFiltro = null; // 'YYYY-MM-DD' o null
   let filterOpen = {periodo:false, servicio:false, color:false, fecha:false};
-  const PERIOD_LABELS = {dia:'Hoy', semana:'Esta semana', mes:'Este mes', anio:'Este año'};
+  const PERIOD_LABELS = {dia:'Hoy', semana:'Esta semana', mes:'Este mes', anio:'Este aÃ±o'};
   const SERVICIOS = ['Encuentro','Videollamada','Cafecito','Telegram'];
 
   function toggleFilter(key){
@@ -1223,7 +1303,7 @@
   }
 
   function getWeekRange(ref){
-    const day = ref.getDay(); // 0=domingo..6=sábado
+    const day = ref.getDay(); // 0=domingo..6=sÃ¡bado
     const diffToMonday = (day === 0 ? -6 : 1 - day);
     const monday = new Date(ref);
     monday.setDate(ref.getDate() + diffToMonday);
@@ -1234,8 +1314,8 @@
     return [monday, sunday];
   }
 
-  function filterByPeriod(list, period){
-    const now = new Date();
+  function filterByPeriod(list, period, refDate){
+    const now = refDate || new Date();
     if(period === 'dia'){
       return list.filter(e => isSameDay(new Date(e.fechaISO), now));
     }
@@ -1252,6 +1332,12 @@
     return list;
   }
 
+  function parseLocalDateStr(str){
+    // 'YYYY-MM-DD' -> Date en horario local (evita corrimientos por zona horaria)
+    const [y,m,d] = str.split('-').map(Number);
+    return new Date(y, m-1, d, 12, 0, 0);
+  }
+
   function renderView(){
     const list = loadEntries().slice().sort((a,b)=> new Date(b.fechaISO) - new Date(a.fechaISO));
     const content = document.getElementById('viewContent');
@@ -1259,8 +1345,8 @@
     if(list.length === 0){
       content.innerHTML = `
         <div class="empty-state">
-          <div class="glyph">◇</div>
-          <p>Todavía no cargaste ningún registro. Tocá "Agregar" desde el inicio para empezar tu libro.</p>
+          <div class="glyph">â—‡</div>
+          <p>TodavÃ­a no cargaste ningÃºn registro. TocÃ¡ "Agregar" desde el inicio para empezar tu libro.</p>
         </div>`;
       return;
     }
@@ -1268,34 +1354,40 @@
     const serviceFiltered = filterByServicio(list, servicioFilter);
     const colorFiltered = filterByColor(serviceFiltered, colorFilter);
     const fechaFiltered = filterByFecha(colorFiltered, fechaFiltro);
-    const periodServiceColor = filterByPeriod(fechaFiltered, totalPeriod);
+    const periodRefDate = fechaFiltro ? parseLocalDateStr(fechaFiltro) : new Date();
+    const periodServiceColor = filterByPeriod(fechaFiltered, totalPeriod, periodRefDate);
     const total = periodServiceColor.reduce((sum, x) => sum + (parseFloat(x.monto) || 0), 0);
 
-    const servicioLabel = servicioFilter === 'todos' ? '' : ` · ${servicioFilter}`;
-    const colorLabel = colorFilter === 'todos' ? '' : ` · ${colorOf(colorFilter).label}`;
-    const fechaLabel = fechaFiltro ? ` · ${fmtFechaCorta(fechaFiltro)}` : '';
+    // La lista de abajo siempre queda acotada a un dÃ­a: el elegido en el filtro
+    // de Fecha, o el dÃ­a de hoy si no se eligiÃ³ ninguno.
+    const listFechaStr = fechaFiltro || toLocalDateStr(new Date());
+    const dayList = filterByFecha(colorFiltered, listFechaStr);
+
+    const servicioLabel = servicioFilter === 'todos' ? '' : ` Â· ${servicioFilter}`;
+    const colorLabel = colorFilter === 'todos' ? '' : ` Â· ${colorOf(colorFilter).label}`;
+    const fechaLabel = fechaFiltro ? ` Â· ${fmtFechaCorta(fechaFiltro)}` : '';
 
     let html = `
       <div class="total-bar">
         <div>
-          <span class="lbl">Total · ${PERIOD_LABELS[totalPeriod]}${servicioLabel}${colorLabel}${fechaLabel}</span>
+          <span class="lbl">Total Â· ${PERIOD_LABELS[totalPeriod]}${servicioLabel}${colorLabel}${fechaLabel}</span>
           <div class="total-count">${periodServiceColor.length} registro${periodServiceColor.length===1?'':'s'}</div>
         </div>
         <span class="val">$ ${fmtMoney(total)}</span>
       </div>
       <div class="filters-row">
         <button class="filter-chip ${filterOpen.periodo?'is-open':''}" onclick="toggleFilter('periodo')">
-          <span class="filter-chip-label">Período</span>
+          <span class="filter-chip-label">PerÃ­odo</span>
           <span class="filter-chip-value">
             <span class="val-text">${PERIOD_LABELS[totalPeriod]}</span>
-            <span class="chev ${filterOpen.periodo?'open':''}">⌄</span>
+            <span class="chev ${filterOpen.periodo?'open':''}">âŒ„</span>
           </span>
         </button>
         <button class="filter-chip ${filterOpen.servicio?'is-open':''}" onclick="toggleFilter('servicio')">
           <span class="filter-chip-label">Servicio</span>
           <span class="filter-chip-value">
             <span class="val-text">${servicioFilter==='todos' ? 'Todos' : servicioFilter}</span>
-            <span class="chev ${filterOpen.servicio?'open':''}">⌄</span>
+            <span class="chev ${filterOpen.servicio?'open':''}">âŒ„</span>
           </span>
         </button>
         <button class="filter-chip ${filterOpen.color?'is-open':''}" onclick="toggleFilter('color')">
@@ -1303,24 +1395,24 @@
           <span class="filter-chip-value">
             ${colorFilter!=='todos' ? `<span class="color-current-dot" style="background:${colorOf(colorFilter).hex}"></span>` : ''}
             <span class="val-text">${colorFilter==='todos' ? 'Todos' : colorOf(colorFilter).label}</span>
-            <span class="chev ${filterOpen.color?'open':''}">⌄</span>
+            <span class="chev ${filterOpen.color?'open':''}">âŒ„</span>
           </span>
         </button>
         <button class="filter-chip ${filterOpen.fecha?'is-open':''}" onclick="toggleFilter('fecha')">
           <span class="filter-chip-label">Fecha</span>
           <span class="filter-chip-value">
-            <span class="val-text">${fechaFiltro ? fmtFechaCorta(fechaFiltro) : 'Cualquiera'}</span>
-            <span class="chev ${filterOpen.fecha?'open':''}">⌄</span>
+            <span class="val-text">${fechaFiltro ? fmtFechaCorta(fechaFiltro) : 'Hoy'}</span>
+            <span class="chev ${filterOpen.fecha?'open':''}">âŒ„</span>
           </span>
         </button>
       </div>
       ${filterOpen.periodo ? `
       <div class="filter-panel">
         <div class="period-tabs">
-          <button class="period-tab ${totalPeriod==='dia'?'active':''}" onclick="setPeriod('dia')">Día</button>
+          <button class="period-tab ${totalPeriod==='dia'?'active':''}" onclick="setPeriod('dia')">DÃ­a</button>
           <button class="period-tab ${totalPeriod==='semana'?'active':''}" onclick="setPeriod('semana')">Semana</button>
           <button class="period-tab ${totalPeriod==='mes'?'active':''}" onclick="setPeriod('mes')">Mes</button>
-          <button class="period-tab ${totalPeriod==='anio'?'active':''}" onclick="setPeriod('anio')">Año</button>
+          <button class="period-tab ${totalPeriod==='anio'?'active':''}" onclick="setPeriod('anio')">AÃ±o</button>
         </div>
       </div>` : ''}
       ${filterOpen.servicio ? `
@@ -1345,18 +1437,18 @@
         </div>
       </div>` : ''}`;
 
-    if(fechaFiltered.length === 0){
+    if(dayList.length === 0){
       html += `
         <div class="empty-state" style="padding-top:44px;">
-          <div class="glyph">◇</div>
-          <p>No hay registros que coincidan con este filtro todavía.</p>
+          <div class="glyph">â—‡</div>
+          <p>${fechaFiltro ? 'No hay registros para ese dÃ­a.' : 'TodavÃ­a no cargaste ningÃºn registro hoy.'}</p>
         </div>`;
       content.innerHTML = html;
       return;
     }
 
     let lastDay = null;
-    fechaFiltered.forEach((entry, i) => {
+    dayList.forEach((entry, i) => {
       const dayKey = new Date(entry.fechaISO).toDateString();
       if(dayKey !== lastDay){
         html += `<div class="day-header">${fmtDay(entry.fechaISO)}</div>`;
@@ -1372,7 +1464,7 @@
             <div class="servicio">${escapeHtml(entry.servicio || 'Sin nombre')}</div>
             <div class="meta">
               ${hora ? `<span>${hora}</span>` : ''}
-              ${dur !== '—' ? `<span>${dur}</span>` : ''}
+              ${dur !== 'â€”' ? `<span>${dur}</span>` : ''}
             </div>
             ${entry.otro ? `<div class="otro">${escapeHtml(entry.otro)}</div>` : ''}
           </span>
@@ -1388,6 +1480,188 @@
     div.textContent = str;
     return div.innerHTML;
   }
+
+  // ---------- Gastos ----------
+  const GASTOS_KEY = 'agenda_gastos_v1';
+
+  function loadGastos(){
+    try{
+      const raw = localStorage.getItem(GASTOS_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+
+  function saveGastos(list){
+    localStorage.setItem(GASTOS_KEY, JSON.stringify(list));
+  }
+
+  function toLocalDateStr(d){
+    return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  }
+
+  let gastoPeriod = 'dia';
+  let gastoFechaFiltro = null; // 'YYYY-MM-DD' o null
+  let gastoFilterOpen = {periodo:false, fecha:false};
+
+  function toggleGastoFilter(key){
+    const wasOpen = gastoFilterOpen[key];
+    gastoFilterOpen = {periodo:false, fecha:false};
+    gastoFilterOpen[key] = !wasOpen;
+    renderGastos();
+  }
+
+  function setGastoPeriod(p){
+    gastoPeriod = p;
+    gastoFilterOpen.periodo = false;
+    renderGastos();
+  }
+
+  function setGastoFecha(value){
+    gastoFechaFiltro = value || null;
+    gastoFilterOpen.fecha = false;
+    renderGastos();
+  }
+
+  function addGasto(){
+    const montoInput = document.getElementById('gastoMonto');
+    const comentarioInput = document.getElementById('gastoComentario');
+    const monto = parseFloat(montoInput.value);
+    if(!monto || monto <= 0){
+      montoInput.focus();
+      return;
+    }
+    const comentario = comentarioInput.value.trim();
+    const list = loadGastos();
+    list.push({
+      id: 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      fechaISO: new Date().toISOString(),
+      monto,
+      comentario
+    });
+    saveGastos(list);
+    montoInput.value = '';
+    comentarioInput.value = '';
+    renderGastos();
+  }
+
+  function deleteGasto(id){
+    if(!confirm('Â¿Eliminar este gasto?')) return;
+    saveGastos(loadGastos().filter(g => g.id !== id));
+    renderGastos();
+  }
+
+  function renderGastos(){
+    const content = document.getElementById('gastosContent');
+    const list = loadGastos().slice().sort((a,b)=> new Date(b.fechaISO) - new Date(a.fechaISO));
+
+    const fechaFiltered = filterByFecha(list, gastoFechaFiltro);
+    const periodRefDate = gastoFechaFiltro ? parseLocalDateStr(gastoFechaFiltro) : new Date();
+    const periodFiltered = filterByPeriod(fechaFiltered, gastoPeriod, periodRefDate);
+    const totalGasto = periodFiltered.reduce((sum,x)=> sum + (parseFloat(x.monto) || 0), 0);
+    const fechaLabel = gastoFechaFiltro ? ` Â· ${fmtFechaCorta(gastoFechaFiltro)}` : '';
+
+    // La lista de abajo siempre queda acotada a un dÃ­a: el elegido en el filtro
+    // de Fecha, o el dÃ­a de hoy si no se eligiÃ³ ninguno.
+    const listFechaStr = gastoFechaFiltro || toLocalDateStr(new Date());
+    const dayList = filterByFecha(list, listFechaStr);
+
+    let html = `
+      <div class="gasto-add-card">
+        <div class="field">
+          <label for="gastoMonto">Monto del gasto</label>
+          <div class="amount-wrap">
+            <span>$</span>
+            <input type="number" id="gastoMonto" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+          </div>
+        </div>
+        <div class="field">
+          <label for="gastoComentario">Comentario</label>
+          <input type="text" id="gastoComentario" placeholder="Breve nota, opcional">
+        </div>
+        <button type="button" class="save-btn" onclick="addGasto()">Agregar gasto</button>
+      </div>
+
+      <div class="total-bar">
+        <div>
+          <span class="lbl">Total gastos Â· ${PERIOD_LABELS[gastoPeriod]}${fechaLabel}</span>
+          <div class="total-count">${periodFiltered.length} registro${periodFiltered.length===1?'':'s'}</div>
+        </div>
+        <span class="val" style="color:var(--danger)">$ ${fmtMoney(totalGasto)}</span>
+      </div>
+      <div class="filters-row">
+        <button class="filter-chip ${gastoFilterOpen.periodo?'is-open':''}" onclick="toggleGastoFilter('periodo')">
+          <span class="filter-chip-label">PerÃ­odo</span>
+          <span class="filter-chip-value">
+            <span class="val-text">${PERIOD_LABELS[gastoPeriod]}</span>
+            <span class="chev ${gastoFilterOpen.periodo?'open':''}">âŒ„</span>
+          </span>
+        </button>
+        <button class="filter-chip ${gastoFilterOpen.fecha?'is-open':''}" onclick="toggleGastoFilter('fecha')">
+          <span class="filter-chip-label">Fecha</span>
+          <span class="filter-chip-value">
+            <span class="val-text">${gastoFechaFiltro ? fmtFechaCorta(gastoFechaFiltro) : 'Hoy'}</span>
+            <span class="chev ${gastoFilterOpen.fecha?'open':''}">âŒ„</span>
+          </span>
+        </button>
+      </div>
+      ${gastoFilterOpen.periodo ? `
+      <div class="filter-panel">
+        <div class="period-tabs">
+          <button class="period-tab ${gastoPeriod==='dia'?'active':''}" onclick="setGastoPeriod('dia')">DÃ­a</button>
+          <button class="period-tab ${gastoPeriod==='semana'?'active':''}" onclick="setGastoPeriod('semana')">Semana</button>
+          <button class="period-tab ${gastoPeriod==='mes'?'active':''}" onclick="setGastoPeriod('mes')">Mes</button>
+          <button class="period-tab ${gastoPeriod==='anio'?'active':''}" onclick="setGastoPeriod('anio')">AÃ±o</button>
+        </div>
+      </div>` : ''}
+      ${gastoFilterOpen.fecha ? `
+      <div class="filter-panel">
+        <div class="date-filter-row">
+          <input type="date" class="date-input" value="${gastoFechaFiltro || ''}" onchange="setGastoFecha(this.value)">
+          ${gastoFechaFiltro ? `<button type="button" class="clear-date-btn" onclick="setGastoFecha('')">Quitar</button>` : ''}
+        </div>
+      </div>` : ''}`;
+
+    if(dayList.length === 0){
+      html += `
+        <div class="empty-state" style="padding-top:24px;">
+          <div class="glyph">â—‡</div>
+          <p>${gastoFechaFiltro ? 'No hay gastos para ese dÃ­a.' : 'TodavÃ­a no cargaste ningÃºn gasto hoy.'}</p>
+        </div>`;
+      content.innerHTML = html;
+      return;
+    }
+
+    const entries = loadEntries();
+    let lastDay = null;
+    dayList.forEach((g, i) => {
+      const dayKey = new Date(g.fechaISO).toDateString();
+      if(dayKey !== lastDay){
+        const dateStr = toLocalDateStr(new Date(g.fechaISO));
+        const montoDelDia = filterByFecha(entries, dateStr).reduce((s,x)=> s + (parseFloat(x.monto) || 0), 0);
+        const gastoDelDia = dayList
+          .filter(x => new Date(x.fechaISO).toDateString() === dayKey)
+          .reduce((s,x)=> s + (parseFloat(x.monto) || 0), 0);
+        const balance = montoDelDia - gastoDelDia;
+        html += `
+          <div class="day-header gasto-day-header">
+            <span>${fmtDay(g.fechaISO)}</span>
+            <span class="balance-chip ${balance < 0 ? 'neg' : 'pos'}">Balance $ ${fmtMoney(balance)}</span>
+          </div>`;
+        lastDay = dayKey;
+      }
+      html += `
+        <div class="ledger-row gasto-row" onclick="deleteGasto('${g.id}')">
+          <span class="idx">${String(i+1).padStart(2,'0')}</span>
+          <span class="main">
+            <div class="servicio">${g.comentario ? escapeHtml(g.comentario) : 'Gasto'}</div>
+          </span>
+          <span class="monto">âˆ’ $ ${fmtMoney(g.monto)}</span>
+        </div>`;
+    });
+
+    content.innerHTML = html + `<div style="height:20px"></div>`;
+  }
+
 
   // ---------- PWA: registro del service worker ----------
   if ('serviceWorker' in navigator) {
