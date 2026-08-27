@@ -211,6 +211,58 @@
     box-shadow:0 2px 6px rgba(0,0,0,.35);
   }
 
+  /* ===== BLOQUEO POR CÓDIGO (TOTP) - INICIO CSS ===== */
+  #lock.screen{display:none;}
+  #lock.screen.active{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    text-align:center;
+  }
+  .lock-wrap{max-width:340px;}
+  .lock-mark{font-size:32px; color:var(--teal); opacity:.85; margin-bottom:10px;}
+  .lock-title{
+    font-family:var(--font-display);
+    font-weight:500;
+    font-size:26px;
+    margin:8px 0 10px;
+  }
+  .lock-text{
+    color:var(--text-dim);
+    font-size:14px;
+    line-height:1.5;
+    margin:0 0 22px;
+  }
+  .lock-input{
+    width:100%;
+    font-family:var(--font-mono);
+    font-size:28px;
+    letter-spacing:.3em;
+    text-align:center;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    color:var(--text);
+    padding:14px 0;
+    margin-bottom:14px;
+  }
+  .lock-input:focus{outline:none; border-color:var(--accent);}
+  .lock-error{
+    color:var(--danger);
+    font-size:13px;
+    min-height:18px;
+    margin-bottom:8px;
+  }
+  .lock-error.shake{animation:shakeErr .3s;}
+  @keyframes shakeErr{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+  /* ===== BLOQUEO POR CÓDIGO (TOTP) - FIN CSS ===== */
+
   /* ---------- Home ---------- */
   #home{padding-top:88px; padding-bottom:40px;}
   .eyebrow{
@@ -320,6 +372,21 @@
     content:"";
     position:absolute; left:0; top:0; right:0; height:3px;
     background:var(--danger);
+  }
+  .tab-btn.quinary{
+    grid-column:1/-1;
+    flex-direction:row;
+    aspect-ratio:auto;
+    justify-content:flex-start;
+    padding:16px 18px;
+    gap:14px;
+  }
+  .tab-btn.quinary .label, .tab-btn.quinary .hint{text-align:left;}
+  .tab-btn.quinary .num{color:var(--teal); border-color:var(--teal); flex-shrink:0;}
+  .tab-btn.quinary::before{
+    content:"";
+    position:absolute; left:0; top:0; right:0; height:3px;
+    background:var(--teal);
   }
 
   /* ---------- Top bar (add/view screens) ---------- */
@@ -809,6 +876,21 @@
     <div class="splash-signature">E+C → L</div>
   </section>
 
+  <!-- ===== BLOQUEO POR CÓDIGO (TOTP) - INICIO HTML ===== -->
+  <!-- LOCK: pantalla de bloqueo en cada apertura. No hay pantalla de configuración:
+       la clave vive fija en el JS y solo la conoce quien compiló este archivo. -->
+  <section id="lock" class="screen">
+    <div class="lock-wrap">
+      <div class="lock-mark">♓</div>
+      <h2 class="lock-title">Ingresá el código</h2>
+      <p class="lock-text">Contactate con el Dev y escribí el código de 6 dígitos.</p>
+      <input type="text" id="lockCodeInput" class="lock-input" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="off" oninput="this.value=this.value.replace(/\D/g,'')">
+      <div id="lockError" class="lock-error"></div>
+      <button type="button" class="save-btn" onclick="attemptUnlock()">Desbloquear</button>
+    </div>
+  </section>
+  <!-- ===== BLOQUEO POR CÓDIGO (TOTP) - FIN HTML ===== -->
+
   <!-- HOME -->
   <section id="home" class="screen">
     <div class="eyebrow">Registro personal</div>
@@ -825,15 +907,20 @@
         <span class="label">Ingresos</span>
         <span class="hint">Repasar, editar o borrar</span>
       </button>
-      <button class="tab-btn tertiary" onclick="showScreen('support')">
-        <span class="num">⇅</span>
-        <span class="label">Soporte</span>
-        <span class="hint">Exportar / importar</span>
+      <button class="tab-btn tertiary" onclick="showScreen('telerecordatorio')">
+        <span class="num"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"></path><path d="M22 2 15 22 11 13 2 9 22 2Z"></path></svg></span>
+        <span class="label">Telerecordatorio</span>
+        <span class="hint">Cuenta regresiva a una fecha límite</span>
       </button>
       <button class="tab-btn quaternary" onclick="showScreen('gastos')">
         <span class="num">−</span>
         <span class="label">Gastos</span>
         <span class="hint">Registrar un gasto</span>
+      </button>
+      <button class="tab-btn quinary" onclick="showScreen('support')">
+        <span class="num">⇅</span>
+        <span class="label">Soporte</span>
+        <span class="hint">Exportar / importar</span>
       </button>
     </div>
   </section>
@@ -948,9 +1035,133 @@
     <div id="gastosContent"></div>
   </section>
 
+  <!-- TELERECORDATORIO -->
+  <section id="telerecordatorio" class="screen">
+    <div class="topbar">
+      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <h2>Telerecordatorio</h2>
+    </div>
+    <div id="teleContent"></div>
+  </section>
+
 </div>
 
 <script>
+  /* ===== BLOQUEO POR CÓDIGO (TOTP) - INICIO JS =====
+     Para desactivar el bloqueo por completo: cambiar LOCK_ENABLED a false.
+     Para revertir del todo: borrar este bloque + los bloques HTML/CSS marcados
+     de la misma forma, y quitar la llamada a initLock() en DOMContentLoaded. */
+  const LOCK_ENABLED = true;
+  // Clave fija: la generó Claude una sola vez y la tenés vos en tu app de autenticación.
+  // Quien reciba este archivo NUNCA la ve dentro de la app.
+  const LOCK_SECRET = 'UXUXY7TCD3CF5MWC';
+  const LOCK_REMEMBER_DAYS = 31;
+  const LOCK_UNLOCKED_UNTIL_KEY = 'agenda_lock_unlocked_until_v1';
+  // Código maestro: desbloquea de forma permanente (no vence ni vuelve a pedirse).
+  const LOCK_MASTER_CODE = '608548';
+  const LOCK_MASTER_KEY = 'agenda_lock_master_v1';
+  const TOTP_STEP = 30;
+  const TOTP_DIGITS = 6;
+  const TOTP_TOLERANCE = 1; // pasos de 30s antes/después, para tolerar desfasaje de reloj
+
+  function base32ToBytes(base32){
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+    const clean = base32.replace(/=+$/,'').toUpperCase();
+    let bits = '';
+    for(const ch of clean){
+      const val = alphabet.indexOf(ch);
+      if(val === -1) continue;
+      bits += val.toString(2).padStart(5,'0');
+    }
+    const bytes = [];
+    for(let i=0; i+8<=bits.length; i+=8){
+      bytes.push(parseInt(bits.substring(i,i+8),2));
+    }
+    return new Uint8Array(bytes);
+  }
+
+  async function generateTOTP(secretBase32, offsetSteps=0){
+    const keyBytes = base32ToBytes(secretBase32);
+    const counter = Math.floor(Date.now()/1000/TOTP_STEP) + offsetSteps;
+    const counterBuf = new ArrayBuffer(8);
+    const view = new DataView(counterBuf);
+    view.setUint32(0, Math.floor(counter / 0x100000000));
+    view.setUint32(4, counter >>> 0);
+    const key = await crypto.subtle.importKey('raw', keyBytes, {name:'HMAC', hash:'SHA-1'}, false, ['sign']);
+    const hmac = new Uint8Array(await crypto.subtle.sign('HMAC', key, counterBuf));
+    const offsetByte = hmac[hmac.length-1] & 0xf;
+    const binCode = ((hmac[offsetByte] & 0x7f) << 24) |
+                    ((hmac[offsetByte+1] & 0xff) << 16) |
+                    ((hmac[offsetByte+2] & 0xff) << 8) |
+                    (hmac[offsetByte+3] & 0xff);
+    return String(binCode % (10 ** TOTP_DIGITS)).padStart(TOTP_DIGITS, '0');
+  }
+
+  async function verifyTOTP(secretBase32, inputCode){
+    if(!inputCode || inputCode.length !== TOTP_DIGITS) return false;
+    for(let offset=-TOTP_TOLERANCE; offset<=TOTP_TOLERANCE; offset++){
+      const code = await generateTOTP(secretBase32, offset);
+      if(code === inputCode) return true;
+    }
+    return false;
+  }
+
+  // Devuelve true si tomó control de la pantalla (bloqueo); false si el bloqueo está desactivado,
+  // si ya se usó el código maestro (desbloqueo permanente), o si todavía estamos dentro de la
+  // ventana de días desde el último código correcto.
+  function initLock(){
+    if(!LOCK_ENABLED) return false;
+    if(localStorage.getItem(LOCK_MASTER_KEY) === '1') return false;
+    const until = parseInt(localStorage.getItem(LOCK_UNLOCKED_UNTIL_KEY) || '0', 10);
+    if(Date.now() < until) return false;
+    showScreen('lock');
+    setTimeout(() => document.getElementById('lockCodeInput')?.focus(), 50);
+    return true;
+  }
+
+  async function attemptUnlock(){
+    const input = document.getElementById('lockCodeInput');
+    const code = input.value.trim();
+    if(code === LOCK_MASTER_CODE){
+      input.value = '';
+      document.getElementById('lockError').textContent = '';
+      localStorage.setItem(LOCK_MASTER_KEY, '1');
+      showScreen('home');
+      return;
+    }
+    const ok = await verifyTOTP(LOCK_SECRET, code);
+    if(ok){
+      input.value = '';
+      document.getElementById('lockError').textContent = '';
+      localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(Date.now() + LOCK_REMEMBER_DAYS*24*60*60*1000));
+      showScreen('home');
+    }else{
+      const err = document.getElementById('lockError');
+      err.textContent = 'Código incorrecto. Probá de nuevo.';
+      err.classList.remove('shake');
+      void err.offsetWidth;
+      err.classList.add('shake');
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  function lockAppNow(){
+    if(!LOCK_ENABLED) return;
+    localStorage.removeItem(LOCK_UNLOCKED_UNTIL_KEY);
+    localStorage.removeItem(LOCK_MASTER_KEY);
+    showScreen('lock');
+    document.getElementById('lockError').textContent = '';
+    setTimeout(() => document.getElementById('lockCodeInput')?.focus(), 50);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && document.getElementById('lock').classList.contains('active')){
+      attemptUnlock();
+    }
+  });
+  /* ===== BLOQUEO POR CÓDIGO (TOTP) - FIN JS ===== */
+
   const STORAGE_KEY = 'agenda_entries_v2';
   let editingId = null;
   const ITEM_H = 36;
@@ -1055,7 +1266,9 @@
     setTimeout(() => {
       const splash = document.getElementById('splash');
       splash.classList.add('fade-out');
-      setTimeout(() => showScreen('home'), 400);
+      setTimeout(() => {
+        if(!initLock()) showScreen('home'); // initLock() muestra setup o pantalla de código si está activo
+      }, 400);
     }, 1500);
   });
 
@@ -1079,12 +1292,14 @@
     try{
       const entries = loadEntries();
       const gastos = loadGastos();
+      const recordatorios = loadTele();
       const payload = {
         app: 'Easy Piscis',
         exportedAt: new Date().toISOString(),
         version: 2,
         entries,
-        gastos
+        gastos,
+        recordatorios
       };
       const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
       const url = URL.createObjectURL(blob);
@@ -1096,7 +1311,7 @@
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      setSupportMsg(`Copia exportada · ${entries.length} registro(s) y ${gastos.length} gasto(s)`, 'ok');
+      setSupportMsg(`Copia exportada · ${entries.length} registro(s), ${gastos.length} gasto(s) y ${recordatorios.length} telerecordatorio(s)`, 'ok');
     }catch(e){
       setSupportMsg('No se pudo exportar la copia.', 'error');
     }
@@ -1111,15 +1326,17 @@
         const parsed = JSON.parse(reader.result);
         const entries = Array.isArray(parsed) ? parsed : parsed.entries;
         const gastos = Array.isArray(parsed) ? [] : (parsed.gastos || []);
+        const recordatorios = Array.isArray(parsed) ? [] : (parsed.recordatorios || []);
         if(!Array.isArray(entries)) throw new Error('Formato inválido');
-        const confirmMsg = `Se van a reemplazar los registros actuales por ${entries.length} registro(s) y ${gastos.length} gasto(s) del archivo. ¿Continuar?`;
+        const confirmMsg = `Se van a reemplazar los registros actuales por ${entries.length} registro(s), ${gastos.length} gasto(s) y ${recordatorios.length} telerecordatorio(s) del archivo. ¿Continuar?`;
         if(!confirm(confirmMsg)){
           event.target.value = '';
           return;
         }
         saveEntries(entries);
         saveGastos(gastos);
-        setSupportMsg(`Copia importada · ${entries.length} registro(s) y ${gastos.length} gasto(s)`, 'ok');
+        saveTele(recordatorios);
+        setSupportMsg(`Copia importada · ${entries.length} registro(s), ${gastos.length} gasto(s) y ${recordatorios.length} telerecordatorio(s)`, 'ok');
       }catch(e){
         setSupportMsg('El archivo no tiene un formato válido.', 'error');
       }finally{
@@ -1135,6 +1352,7 @@
     document.getElementById(id).classList.add('active');
     if(id === 'view') renderView();
     if(id === 'gastos') renderGastos();
+    if(id === 'telerecordatorio') renderTele();
   }
 
   function goHomeFromAdd(){
@@ -1662,6 +1880,109 @@
     content.innerHTML = html + `<div style="height:20px"></div>`;
   }
 
+
+
+  // ---------- Telerecordatorio ----------
+  const TELE_KEY = 'agenda_telerecordatorios_v1';
+
+  function loadTele(){
+    try{
+      const raw = localStorage.getItem(TELE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+
+  function saveTele(list){
+    localStorage.setItem(TELE_KEY, JSON.stringify(list));
+  }
+
+  function diasRestantes(fechaStr){
+    const hoy = new Date();
+    hoy.setHours(0,0,0,0);
+    const limite = parseLocalDateStr(fechaStr);
+    limite.setHours(0,0,0,0);
+    return Math.round((limite - hoy) / 86400000);
+  }
+
+  function fmtCountdown(dias){
+    if(dias > 0) return `${dias} día${dias===1?'':'s'} restante${dias===1?'':'s'}`;
+    if(dias === 0) return 'Vence hoy';
+    return `Venció hace ${Math.abs(dias)} día${Math.abs(dias)===1?'':'s'}`;
+  }
+
+  function fmtFechaLarga(fechaStr){
+    return parseLocalDateStr(fechaStr).toLocaleDateString('es-AR', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+  }
+
+  function addTele(){
+    const nombreInput = document.getElementById('teleNombre');
+    const fechaInput = document.getElementById('teleFecha');
+    const nombre = nombreInput.value.trim();
+    const fecha = fechaInput.value;
+    if(!nombre){ nombreInput.focus(); return; }
+    if(!fecha){ fechaInput.focus(); return; }
+    const list = loadTele();
+    list.push({
+      id: 't_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      nombre,
+      fechaLimite: fecha,
+      creadoISO: new Date().toISOString()
+    });
+    saveTele(list);
+    nombreInput.value = '';
+    fechaInput.value = '';
+    renderTele();
+  }
+
+  function deleteTele(id){
+    if(!confirm('¿Eliminar este telerecordatorio?')) return;
+    saveTele(loadTele().filter(t => t.id !== id));
+    renderTele();
+  }
+
+  function renderTele(){
+    const content = document.getElementById('teleContent');
+    const list = loadTele().slice().sort((a,b)=> parseLocalDateStr(a.fechaLimite) - parseLocalDateStr(b.fechaLimite));
+
+    let html = `
+      <div class="gasto-add-card">
+        <div class="field">
+          <label for="teleNombre">Nombre de usuario</label>
+          <input type="text" id="teleNombre" placeholder="¿A quién le recordás?">
+        </div>
+        <div class="field">
+          <label for="teleFecha">Fecha límite</label>
+          <input type="date" id="teleFecha" class="date-input" style="width:100%">
+        </div>
+        <button type="button" class="save-btn" onclick="addTele()">Agregar recordatorio</button>
+      </div>`;
+
+    if(list.length === 0){
+      html += `
+        <div class="empty-state" style="padding-top:24px;">
+          <div class="glyph">◇</div>
+          <p>Todavía no armaste ningún telerecordatorio.</p>
+        </div>`;
+      content.innerHTML = html;
+      return;
+    }
+
+    list.forEach((t, i) => {
+      const dias = diasRestantes(t.fechaLimite);
+      const vencido = dias < 0;
+      html += `
+        <div class="ledger-row gasto-row" onclick="deleteTele('${t.id}')">
+          <span class="idx">${String(i+1).padStart(2,'0')}</span>
+          <span class="main">
+            <div class="servicio">${escapeHtml(t.nombre)}</div>
+            <div class="meta"><span>${fmtFechaLarga(t.fechaLimite)}</span></div>
+          </span>
+          <span class="monto" style="color:${vencido ? 'var(--danger)' : 'var(--teal)'}">${fmtCountdown(dias)}</span>
+        </div>`;
+    });
+
+    content.innerHTML = html + `<div style="height:20px"></div>`;
+  }
 
   // ---------- PWA: registro del service worker ----------
   if ('serviceWorker' in navigator) {
